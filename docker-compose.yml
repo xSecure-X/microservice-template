@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  rabbit:
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
+    stdin_open: true
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: secure-x-db
+      POSTGRES_USER: secure-x
+      POSTGRES_PASSWORD: secure-x
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    command: "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      DB_HOST: db
+      DB_NAME: secure-x-db
+      DB_USERNAME: secure-x
+      DB_PASSWORD: secure-x
+    volumes:
+      - .:/app:cached
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+volumes:
+  postgres_data: {}
+networks:
+  default:
+    name: secure-x_default
