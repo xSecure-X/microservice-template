@@ -6,8 +6,6 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-How to run the project"
-
 * Install docker https://www.docker.com/
 
 Run the following commands:
