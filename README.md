@@ -6,8 +6,7 @@
 
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Steps to get the application Up and Running
 
 * Install docker https://www.docker.com/
 
