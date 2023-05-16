@@ -1,28 +1,16 @@
-<<<<<<< HEAD
+
 # microservice-template
-=======
+===========================================
 # README
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-Things you may want to cover:
+How to run the project"
 
-* Ruby version
+* Install docker https://www.docker.com/
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
->>>>>>> 01b38c3 (adding initial files)
+Run the following commands:
+1. `docker-compose build`
+2. `docker-compose up`
+3. `http://localhost:3000/`
