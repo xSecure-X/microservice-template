@@ -1,6 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      protect_from_forgery with: :null_session
           before_action :set_user, only: [:show, :update, :destroy]
         
           def index
@@ -13,8 +14,11 @@ module Api
           end
         
           def create
-            user_service = User::UserCreator.new(user_params)
+            user_service = UserCreator.new(user_params)
+            
             @user = user_service.create_user
+            puts @user
+            puts "hola"
         
             if @user.persisted?
               render json: @user, status: :created
@@ -24,7 +28,7 @@ module Api
           end
         
           def update
-            user_service = User::UserCreator.new(user_params)
+            user_service = UserCreator.new(user_params)
             @user = user_service.update_user(@user)
         
             if @user.errors.empty?
@@ -35,7 +39,7 @@ module Api
           end
         
           def destroy
-            user_service = User::UserCreator.new(user_params)
+            user_service = UserCreator.new(user_params)
             user_service.delete_user(@user)
             head :no_content
           end
