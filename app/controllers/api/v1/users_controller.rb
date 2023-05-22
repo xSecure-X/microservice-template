@@ -17,8 +17,7 @@ module Api
             user_service = UserCreator.new(user_params)
             
             @user = user_service.create_user
-            puts @user
-            puts "hola"
+            
         
             if @user.persisted?
               render json: @user, status: :created
