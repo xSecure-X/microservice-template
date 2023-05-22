@@ -9,6 +9,31 @@
   </div>
 
   <div class="field">
+  <%= f.label :full_name %>
+  <%= f.text_field :full_name %>
+</div>
+
+<div class="field">
+  <%= f.label :email %>
+  <%= f.email_field :email %>
+</div>
+
+<div class="field">
+  <%= f.label :roles %>
+  <%= f.select :roles, options_for_select(['cliente', 'admin']) %>
+</div>
+
+<div class="field">
+  <%= f.label :status %>
+  <%= f.number_field :status %>
+</div>
+
+<div class="field">
+  <%= f.label :company_id %>
+  <%= f.text_field :company_id %>
+</div>
+
+  <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
@@ -20,6 +45,7 @@
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
+
 
   <div class="actions">
     <%= f.submit "Sign up" %>

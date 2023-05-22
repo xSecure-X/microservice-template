@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  protect_from_forgery with: :exception
+  
+
+ 
+  private
+
+  def sign_up_params
+    params.require(:user).permit(:full_name,:company_id,:roles,:status, :email, :password, :password_confirmation,:current_password)
+  end
+
+  def account_update_params
+    authorize! :manage, @registrion
+    params.require(:user).permit(:full_name,:company_id,:roles,:status, :email, :password, :password_confirmation,:current_password)
+  end
+
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
