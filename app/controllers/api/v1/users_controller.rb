@@ -14,7 +14,7 @@ module Api
           end
         
           def create
-            user_service = UserCreator.new(user_params)
+            user_service = User::UserCreator.new(user_params)
             
             @user = user_service.create_user
             
@@ -27,7 +27,7 @@ module Api
           end
         
           def update
-            user_service = UserCreator.new(user_params)
+            user_service = User::UserCreator.new(user_params)
             @user = user_service.update_user(@user)
         
             if @user.errors.empty?
@@ -38,7 +38,7 @@ module Api
           end
         
           def destroy
-            user_service = UserCreator.new(user_params)
+            user_service = User::UserCreator.new(user_params)
             user_service.delete_user(@user)
             head :no_content
           end
