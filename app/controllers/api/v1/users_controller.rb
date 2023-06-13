@@ -1,6 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      protect_from_forgery with: :null_session
           before_action :set_user, only: [:show, :update, :destroy]
         
           def index
@@ -14,7 +15,9 @@ module Api
         
           def create
             user_service = User::UserCreator.new(user_params)
+            
             @user = user_service.create_user
+            
         
             if @user.persisted?
               render json: @user, status: :created
