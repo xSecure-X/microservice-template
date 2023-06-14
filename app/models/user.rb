@@ -20,7 +20,7 @@ devise :database_authenticatable, :registerable,
 :omniauthable, omniauth_providers: [:google_oauth2]
 
     before_create :assign_created_date
-
+    alias_attribute :updated_at, :modified_at
     private
 
     def assign_created_date
@@ -39,7 +39,6 @@ devise :database_authenticatable, :registerable,
         user.status = 1
         user.company_id = auth.uid
         user.uid = auth.uid
-        user.telefono = null
         user.created_date = Time.now.utc
         user.modified_date = Time.now.utc
       end
