@@ -4,7 +4,7 @@ require_relative '../app/models/user.rb'
 require_relative '../app/services/user/user_creator.rb'
 
 
-RSpec.describe UserCreator do
+RSpec.describe UserModule::UserCreator do
     
     let(:user_params) { { name: 'John Doe', email: 'john.doe@example.com' } }
     let(:user) { double('User') }
