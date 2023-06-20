@@ -4,18 +4,17 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 100 }
   validates :roles, length: { maximum: 100 }
   validates :status, presence: true, numericality: { only_integer: true }
-  validates :company_id, presence: true
-  validates :created_date, presence: true
-  validates :modified_date, presence: true
-  validates :deleted_date, presence: true
+  validates :company_id, presence: false
+  validates :created_date, presence: false
+  validates :modified_date, presence: false
+  validates :deleted_date, presence: false
 
   delegate :can?, :cannot?, to: :ability
 
   def ability
     @ability ||= Ability.new(self)
   end
-# Include default devise modules. Others available are:
-# :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+
 devise :database_authenticatable, :registerable,
 :recoverable, :rememberable, :validatable,
 :omniauthable, omniauth_providers: [:google_oauth2]
@@ -40,10 +39,9 @@ devise :database_authenticatable, :registerable,
         user.status = 1
         user.company_id = auth.uid
         user.uid = auth.uid
+        user.telefono = null
         user.created_date = Time.now.utc
         user.modified_date = Time.now.utc
       end
     end
-   # some_user.can? :update, @article
 end
-  

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+
 root 'pages#home'
 devise_for :users,controllers: {
   registrations: 'users/registrations',
@@ -11,6 +12,7 @@ devise_for :users,controllers: {
 
   namespace :api do
     namespace :v1 do
+      resources :users, only: [:create]
       scope :users do
         get '/', to: 'users#index'
         post '/', to: 'users#create'
