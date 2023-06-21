@@ -13,6 +13,10 @@
 2. `docker-compose up`
 3. `http://localhost:3000/`
 
+### local development
+1. `bundle install`
+2. `bin/rails db:migrate`
+3. `bin/rails s`
 
 ## How to Run rails commands inside a docker container
 
