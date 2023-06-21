@@ -31,3 +31,4 @@ gem "omniauth-rails_csrf_protection"
 group :development, :test do
   gem 'rspec-rails'
 end
+gem 'rswag'

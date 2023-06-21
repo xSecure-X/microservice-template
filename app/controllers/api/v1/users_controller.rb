@@ -1,3 +1,4 @@
+require_relative '../../../services/user/user_creator'
 module Api
   module V1
     class UsersController < ApplicationController
