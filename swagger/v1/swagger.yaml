@@ -1,0 +1,140 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/users":
+    post:
+      summary: Creates a new user
+      tags:
+      - Users
+      parameters: []
+      responses:
+        '201':
+          description: Created
+        '422':
+          description: Unprocessable Entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                email:
+                  type: string
+                roles:
+                  type: string
+                status:
+                  type: integer
+                company_id:
+                  type: string
+              required:
+              - full_name
+              - email
+    get:
+      summary: Retrieves all users
+      tags:
+      - Users
+      responses:
+        '200':
+          description: users found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    full_name:
+                      type: string
+                    email:
+                      type: string
+                    roles:
+                      type: string
+                    status:
+                      type: integer
+                    provider:
+                      type:
+                      - 'null'
+                      - string
+                    company_id:
+                      type:
+                      - 'null'
+                      - integer
+                    uid:
+                      type:
+                      - 'null'
+                      - string
+                    created_at:
+                      type: string
+                      format: date-time
+                    modified_at:
+                      type: string
+                      format: date-time
+                    telefono:
+                      type:
+                      - 'null'
+                      - string
+                    deleted_at:
+                      type:
+                      - 'null'
+                      - string
+                  required:
+                  - id
+                  - full_name
+                  - email
+                  - roles
+                  - status
+                  - created_at
+                  - modified_at
+  "/api/v1/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieves a user
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  full_name:
+                    type: string
+                  email:
+                    type: string
+                  roles:
+                    type: string
+                  status:
+                    type: integer
+                  company_id:
+                    type: string
+                required:
+                - full_name
+                - email
+        '404':
+          description: Not Found
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

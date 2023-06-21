@@ -1,6 +1,6 @@
-module User
+module UserModule
 class UserCreator
-  def initialize(user_params)
+  def initialize(user_params={})
     @user_params = user_params
   end
 

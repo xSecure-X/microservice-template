@@ -5,9 +5,6 @@ class User < ApplicationRecord
   validates :roles, length: { maximum: 100 }
   validates :status, presence: true, numericality: { only_integer: true }
   validates :company_id, presence: false
-  validates :created_date, presence: false
-  validates :modified_date, presence: false
-  validates :deleted_date, presence: false
 
   delegate :can?, :cannot?, to: :ability
 
@@ -16,17 +13,11 @@ class User < ApplicationRecord
   end
 
 devise :database_authenticatable, :registerable,
-:recoverable, :rememberable, :validatable,
+:recoverable, :rememberable,
 :omniauthable, omniauth_providers: [:google_oauth2]
 
-    before_create :assign_created_date
-
+    alias_attribute :updated_at, :modified_at
     private
-
-    def assign_created_date
-      self.created_date = Time.now.utc
-      self.modified_date = Time.now.utc
-    end
 
     def self.from_omniauth(auth)
       where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -39,9 +30,6 @@ devise :database_authenticatable, :registerable,
         user.status = 1
         user.company_id = auth.uid
         user.uid = auth.uid
-        user.telefono = null
-        user.created_date = Time.now.utc
-        user.modified_date = Time.now.utc
       end
     end
 end
