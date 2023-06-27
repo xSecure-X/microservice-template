@@ -17,15 +17,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_030254) do
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "full_name"
     t.string "email"
-    t.string "encrypted_password", default: "", null: false
     t.string "roles"
     t.integer "status"
-    t.string "provider"
     t.uuid "company_id"
-    t.string "uid"
-    t.datetime "remember_created_at"
+    t.datetime "created_date"
+    t.datetime "modified_date"
+    t.datetime "deleted_date"
     t.datetime "created_at", null: false
     t.datetime "modified_at", null: false
+    t.string "provider"
+    t.string "uid"
+    t.string "encrypted_password"
+    t.datetime "remember_created_at"
     t.string "telefono"
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"

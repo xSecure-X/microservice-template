@@ -19,7 +19,7 @@ RSpec.describe ::Api::V1::UsersController, type: :controller do
       end
 
       it 'creates a new user' do
-        expect { post :create, params: valid_params }.to change(User, :count).by(0) # No actual database change
+        expect { post :create, params: valid_params }.to change(User, :count).by(1)
       end
 
       it 'returns a JSON response with the created user' do
@@ -40,7 +40,7 @@ RSpec.describe ::Api::V1::UsersController, type: :controller do
       end
 
       it 'does not create a new user' do
-        expect {post :create, params: invalid_params}.to change(User, :count).by(0) # No actual database change
+        expect { post :create, params: invalid_params }.to change(User, :count).by(0)
       end
 
       it 'returns an unprocessable entity status' do
