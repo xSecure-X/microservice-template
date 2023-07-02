@@ -2,10 +2,22 @@
 
 module Roles
   module Services
-    # User creator class
+    # Role creator class
     class RoleCreator
-      def initialize(user_params={})
-        @user_params = user_params
+      def initialize(role_params={})
+        @role_params = role_params
+      end
+      def create_role
+        Role.create(@role_params)
+      end
+
+      def update_role(role)
+        role.update(@role_params)
+        role
+      end
+
+      def delete_role(role)
+        role.destroy
       end
     end
   end

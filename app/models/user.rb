@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 
   validates :full_name, presence: true, length: { maximum: 100 }
-  validates :email, presence: true, length: { maximum: 100 }
+  validates :email, presence: true, length: { maximum: 100 }, uniqueness: true
   validates :roles, length: { maximum: 100 }
   validates :status, presence: true, numericality: { only_integer: true }
   validates :company_id, presence: false
@@ -12,8 +12,7 @@ class User < ApplicationRecord
     @ability ||= Ability.new(self)
   end
 
-devise :database_authenticatable, :registerable,
-:recoverable, :rememberable,
+devise :database_authenticatable, :registerable, :rememberable,
 :omniauthable, omniauth_providers: [:google_oauth2]
 
     alias_attribute :updated_at, :modified_at
