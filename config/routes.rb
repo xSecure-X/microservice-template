@@ -10,7 +10,12 @@ devise_for :users,controllers: {
   sessions: 'users/sessions',
   omniauth_callbacks: 'users/omniauth_callbacks'
 }
-
+resources :roles do
+  collection do
+    post 'create', to: 'roles#create'
+    get 'all', to: 'roles#index'
+  end
+end
 
   namespace :api do
     namespace :v1 do
