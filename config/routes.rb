@@ -2,20 +2,27 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 
+  root 'pages#home'
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks'
+  }
 
-
-root 'pages#home'
-devise_for :users,controllers: {
-  registrations: 'users/registrations',
-  sessions: 'users/sessions',
-  omniauth_callbacks: 'users/omniauth_callbacks'
-}
-resources :roles do
-  collection do
-    post 'create', to: 'roles#create'
-    get 'all', to: 'roles#index'
+  namespace :api do
+    namespace :v1 do
+      resources :roles, only: [:create]
+      scope :roles do
+        get 'all', to: 'roles#index'
+        get '/', to: 'roles#index'
+        post '/', to: 'roles#create'
+        get '/:id', to: 'roles#show'
+        patch '/:id', to: 'roles#update'
+        put '/:id', to: 'roles#update'
+        delete '/:id', to: 'roles#destroy'
+      end
+    end
   end
-end
 
   namespace :api do
     namespace :v1 do
