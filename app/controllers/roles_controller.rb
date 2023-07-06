@@ -11,7 +11,7 @@ class RolesController < ApplicationController
         if @role.nil?
             render json: {
               success: false,
-              message: ""
+              message: ''
             }, status: :not_found
         else
             render json: {
@@ -22,7 +22,7 @@ class RolesController < ApplicationController
                   create_at: @role.created_at.strftime("%Y-%m-%d")
                 },
                 success: true,
-                message: ""
+                message: ''
               }
             end
     end
@@ -32,11 +32,12 @@ class RolesController < ApplicationController
     end
   
     def create
-      @role = Role.new(role_params)
-      if @role.save
-        render json: { success: true, message: "" }, status: :created
+      role_service = ::Roles::Services::RoleCreator.new(role_params)
+      @role = role_service.create_role
+      if @role.persisted?
+        render json: { success: true, message: '' }, status: :created
       else
-        render json: { success: false, message: "" }, status: :unprocessable_entity
+        render json: { success: false, message: @role.errors }, status: :unprocessable_entity
       end
     end
   
@@ -47,12 +48,16 @@ class RolesController < ApplicationController
         if @role.nil?
             render json: {
               success: false,
-              message: ""
+              message: ''
             }, status: :not_found
-        elsif @role.update(role_params)
-            render json: { success: true, message: "" }, status: :ok
         else
-            render json: { success: false, message: "" }, status: :unprocessable_entity
+          role_service = ::Roles::Services::RoleCreator.new(role_params)
+          @role = role_service.update_role(@role)
+          if @role.errors.empty?
+            render json: { success: true, message: '' }, status: :ok
+          else
+            render json: { success: false, message: @role.errors }, status: :unprocessable_entity
+          end
         end
     end
   
@@ -60,10 +65,12 @@ class RolesController < ApplicationController
         if @role.nil?
             render json: {
               success: false,
-              message: ""
+              message: ''
             }, status: :not_found
-        else @role.destroy
-            render json: { success: true, message: "" },status: :no_content
+        else
+            role_service = ::Roles::Services::RoleCreator.new
+            role_service.delete_role(@role)
+            render json: { success: true, message: '' },status: :no_content
         end
     end
   
