@@ -7,6 +7,7 @@ module Roles
       def initialize(role_params={})
         @role_params = role_params
       end
+
       def create_role
         Role.create(@role_params)
       end
@@ -19,7 +20,19 @@ module Roles
       def delete_role(role)
         role.destroy
       end
+
+      def to_json(role)
+        {
+          result: {
+            id: role.id,
+            name: role.name,
+            description: role.description,
+            create_at: role.created_at.strftime('%Y-%m-%d')
+          },
+          success: true,
+          message: ''
+        }
+      end
     end
   end
 end
-
