@@ -2,12 +2,37 @@
 
 module Roles
   module Services
-    # User creator class
+    # Role creator class
     class RoleCreator
-      def initialize(user_params={})
-        @user_params = user_params
+      def initialize(role_params={})
+        @role_params = role_params
+      end
+
+      def create_role
+        Role.create(@role_params)
+      end
+
+      def update_role(role)
+        role.update(@role_params)
+        role
+      end
+
+      def delete_role(role)
+        role.destroy
+      end
+
+      def to_json(role)
+        {
+          result: {
+            id: role.id,
+            name: role.name,
+            description: role.description,
+            create_at: role.created_at.strftime('%Y-%m-%d')
+          },
+          success: true,
+          message: ''
+        }
       end
     end
   end
 end
-

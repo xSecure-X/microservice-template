@@ -34,3 +34,4 @@ group :development, :test do
 end
 gem 'rswag'
 gem 'rack-cors'
+gem 'paranoia'
