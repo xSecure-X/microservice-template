@@ -44,13 +44,14 @@ module Api
 
       def destroy
         role_check_null
-        @role = ::Roles::Services::RoleCreator.new.delete_role(@role)
-
-        if @role.destroyed?
+       
+        if @role.destroy
           render json: { success: true, message: '' }, status: :ok
         else
           render json: { success: false, message: @role.errors }, status: :unprocessable_entity
-        end
+        
+      end
+      
       end
 
       private
@@ -64,12 +65,12 @@ module Api
       end
 
       def role_check_null
-        return nil if @role.nil?
-
-        render json: {
-          success: false,
-          message: ''
-        }, status: :not_found
+        if @role.nil?
+          render json: {
+            success: false,
+            message: 'Role not found.'
+          }, status: :not_found
+        end
       end
     end
   end
