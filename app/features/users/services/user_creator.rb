@@ -20,6 +20,13 @@ module Users
       def delete_user(user)
         user.destroy
       end
+      def to_json(user)
+        {
+          result: user,
+          success: true,
+          message: ''
+        }
+      end
     end
   end
 end

@@ -13,23 +13,13 @@ module Api
       end
 
       def show
-        if @user.nil?
-          render json: {
-            success: false,
-            message: ""
-          }, status: :not_found
-        else
-          render json: {
-            result: @user,
-            success: true,
-            message: ""
-          }
-        end
+        return if user_check_null
+        render json: ::Users::Services::UserCreator.new.to_json(@user)
       end
 
       def create
-        user_service = ::Users::Services::UserCreator.new(user_params)
-        @user = user_service.create_user
+        @user = ::Users::Services::UserCreator.new(user_params).create_user
+
         if @user.persisted?
           render json: { success: true, message: "" }, status: :created
         else
@@ -38,34 +28,26 @@ module Api
       end
 
       def update
-        if @user.nil?
-          render json: {
-            success: false,
-            message: ""
-          }, status: :not_found
-        else
-          user_service = ::Users::Services::UserCreator.new(user_params)
-          @user = user_service.update_user(@user)
+        return if user_check_null
+        @user = ::Users::Services::UserCreator.new(user_params).update_user(@user)
         
-          if @user.errors.empty?
-            render json: { success: true, message: '' }, status: :ok
-          else
-            render json: { success: true, message: @user.errors }, status: :unprocessable_entity
-          end
+        if @user.errors.empty?
+          render json: { success: true, message: '' }, status: :ok
+        else
+          render json: { success: false, message: @user.errors }, status: :unprocessable_entity
         end
       end
 
       def destroy
-        if @user.nil?
-          render json: {
-            success: false,
-            message: ""
-          }, status: :not_found
+        return if user_check_null
+        @user = ::Users::Services::UserCreator.new.delete_user(@user)
+
+        if @user.deleted?
+          render json: { success: true, message: '' }, status: :ok
         else
-          user_service = ::Users::Services::UserCreator.new
-          user_service.delete_user(@user)
-          render json: { success: true, message: '' },status: :no_content
+          render json: { success: false, message: @user.errors }, status: :unprocessable_entity
         end
+        
       end
 
       private
@@ -77,6 +59,15 @@ module Api
       def user_params
         params.require(:user).permit(:full_name, :email, :roles, :status, :company_id)
       end
-    end
+
+      def user_check_null
+        return false unless @user.nil?
+
+          render json: {
+            success: false,
+            message: ''
+          }, status: :not_found
+        end
+      end
   end
 end
