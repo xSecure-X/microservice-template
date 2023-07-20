@@ -50,7 +50,9 @@ module Api
           render json: { success: true, message: '' }, status: :ok
         else
           render json: { success: false, message: @role.errors }, status: :unprocessable_entity
-        end
+        
+      end
+      
       end
 
       private

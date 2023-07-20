@@ -18,7 +18,9 @@ module Roles
       end
 
       def delete_role(role)
-        role.destroy
+        if role
+          role.destroy
+        end
       end
 
       def to_json(role)
