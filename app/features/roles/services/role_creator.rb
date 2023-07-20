@@ -25,12 +25,7 @@ module Roles
 
       def to_json(role)
         {
-          result: {
-            id: role.id,
-            name: role.name,
-            description: role.description,
-            create_at: role.created_at.strftime('%Y-%m-%d')
-          },
+          result: role,
           success: true,
           message: ''
         }

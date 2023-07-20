@@ -13,7 +13,7 @@ module Api
       end
 
       def show
-        role_check_null
+        return if role_check_null
         render json: ::Roles::Services::RoleCreator.new.to_json(@role)
       end
 
@@ -32,7 +32,7 @@ module Api
       end
 
       def update
-        role_check_null
+        return if role_check_null
         @role = ::Roles::Services::RoleCreator.new(role_params).update_role(@role)
 
         if @role.errors.empty?
@@ -43,9 +43,10 @@ module Api
       end
 
       def destroy
-        role_check_null
-       
-        if @role.destroy
+        return if role_check_null
+        @role = ::Roles::Services::RoleCreator.new.delete_role(@role)
+
+        if @role.deleted?
           render json: { success: true, message: '' }, status: :ok
         else
           render json: { success: false, message: @role.errors }, status: :unprocessable_entity
@@ -65,12 +66,12 @@ module Api
       end
 
       def role_check_null
-        if @role.nil?
-          render json: {
-            success: false,
-            message: 'Role not found.'
-          }, status: :not_found
-        end
+        return false unless @role.nil?
+
+        render json: {
+          success: false,
+          message: ''
+        }, status: :not_found
       end
     end
   end
