@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-
+  acts_as_paranoid
   validates :full_name, presence: true, length: { maximum: 100 }
   validates :email, presence: true, length: { maximum: 100 }, uniqueness: true
   validates :roles, length: { maximum: 100 }

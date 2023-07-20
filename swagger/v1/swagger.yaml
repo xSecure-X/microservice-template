@@ -1,187 +1,196 @@
-openapi: 3.0.1
+swagger: "2.0"
 info:
-  title: API V1
-  version: v1
+  version: "1.0.0"
+  title: "Users API"
+  description: "API for managing users"
+
 paths:
-  "/api/v1/users":
+  /api/v1/users:
+    get:
+      tags:
+        - Users
+      summary: "Get all users"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+    
     post:
-      summary: Creates a new user
       tags:
         - Users
-      parameters: []
-      responses:
-        '201':
-          description: Created
-        '422':
-          description: Unprocessable Entity
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                full_name:
-                  type: string
-                email:
-                  type: string
-                roles:
-                  type: string
-                status:
-                  type: integer
-                company_id:
-                  type: string
-              required:
-                - full_name
-                - email
-    get:
-      summary: Retrieves all users
-      tags:
-        - Users
-      responses:
-        '200':
-          description: Users found
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                    full_name:
-                      type: string
-                    email:
-                      type: string
-                    roles:
-                      type: string
-                    status:
-                      type: integer
-                    provider:
-                      type:
-                        - 'null'
-                        - string
-                    company_id:
-                      type:
-                        - 'null'
-                        - integer
-                    uid:
-                      type:
-                        - 'null'
-                        - string
-                    created_at:
-                      type: string
-                      format: date-time
-                    modified_at:
-                      type: string
-                      format: date-time
-                    telefono:
-                      type:
-                        - 'null'
-                        - string
-                    deleted_at:
-                      type:
-                        - 'null'
-                        - string
-                  required:
-                    - id
-                    - full_name
-                    - email
-                    - roles
-                    - status
-                    - created_at
-                    - modified_at
-
-  "/api/v1/users/{id}":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Retrieves a user
-      tags:
-        - Users
+      summary: "Create a new user"
       parameters:
-        - name: id
-          in: path
+        - in: "body"
+          name: "user"
+          description: "User object"
           required: true
           schema:
-            type: integer
+            $ref: "#/definitions/UserInput"
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  full_name:
-                    type: string
-                  email:
-                    type: string
-                  roles:
-                    type: string
-                  status:
-                    type: integer
-                  company_id:
-                    type: string
-                required:
-                  - full_name
-                  - email
-        '404':
-          description: Not Found
+        201:
+          description: "User created successfully"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        422:
+          description: "Validation failed"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
-  "/api/v1/users/{id}/update":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
+  /api/v1/users/{id}:
+    get:
+      tags:
+        - Users
+      summary: "Get a user by ID"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "User ID"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SuccessShowUser"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
     put:
-      summary: Updates a user
       tags:
         - Users
+      summary: "Update a user by ID"
       parameters:
-        - name: id
-          in: path
+        - in: "path"
+          name: "id"
+          description: "User ID"
+          required: true
+          type: "string"
+          format: "uuid"
+        - in: "body"
+          name: "user"
+          description: "Updated user object"
           required: true
           schema:
-            type: integer
+            $ref: "#/definitions/UserInput"
       responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
+        200:
+          description: "User updated successfully"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        422:
+          description: "Validation failed"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
-  "/api/v1/users/{id}/delete":
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
     delete:
-      summary: Deletes a user
       tags:
         - Users
+      summary: "Delete a user by ID"
       parameters:
-        - name: id
-          in: path
+        - in: "path"
+          name: "id"
+          description: "User ID"
           required: true
-          schema:
-            type: integer
+          type: "string"
+          format: "uuid"
       responses:
-        '204':
-          description: No Content
-        '404':
-          description: Not Found
+        200:
+          description: "User deleted successfully"
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
-servers:
-  - url: https://{defaultHost}
-    variables:
-      defaultHost:
-        default: localhost:3000
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      full_name:
+        type: "string"
+      email:
+        type: "string"
+      roles:
+        type: "string"
+      status:
+        type: "integer"
+        format: "int64"
+      provider:
+        type: "string"
+      company_id:
+        type: "string"
+        format: "uuid"
+      uid:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date-time"
+      modified_at:
+        type: "string"
+        format: "date-time"
+      telefono:
+        type: string
+        pattern: '^\d{8}$'
+      deleted_at:
+        type: "string"
+        format: "date-time"
+        default: null
+
+  UserInput:
+    type: "object"
+    properties:
+      full_name:
+        type: "string"
+      email:
+        type: "string"
+      roles:
+        type: "string"
+      status:
+        type: "integer"
+        format: "int64"
+        default: 1
+      company_id:
+        type: "string"
+        format: "uuid"
+
+  ErrorResponse:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+        default: false
+      message:
+        type: "string"
+  
+  SuccessResponse:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+  
+  SuccessShowUser:
+    type: "object"
+    properties:
+      result:
+        $ref: "#/definitions/User"
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+

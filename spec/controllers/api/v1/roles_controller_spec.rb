@@ -55,6 +55,7 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
         allow(role_creator).to receive(:update_role).and_return(role)
         allow(role).to receive(:errors).and_return({})
         allow(role).to receive(:as_json).and_return(valid_params[:role])
+        allow(Role).to receive(:find_by).with(id: role_id).and_return(role)
       end
 
       it 'updates the role' do
@@ -71,6 +72,7 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
         allow(::Roles::Services::RoleCreator).to receive(:new).and_return(role_creator)
         allow(role_creator).to receive(:update_role).and_return(role)
         allow(role).to receive(:errors).and_return({ name: ["can't be blank"] })
+        allow(Role).to receive(:find_by).with(id: role_id).and_return(role)
       end
 
       it 'does not update the role' do
@@ -92,11 +94,12 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
       allow(::Roles::Services::RoleCreator).to receive(:new).and_return(role_creator)
       allow(role_creator).to receive(:delete_role).and_return(role)
       allow(role).to receive_message_chain(:errors, :full_messages).and_return(['Error message'])
+      allow(Role).to receive(:find_by).with(id: role_id).and_return(role)
     end
 
     context 'when role is found' do
       it 'destroys the role' do
-        allow(role).to receive(:destroyed?).and_return(true)
+        allow(role).to receive(:deleted?).and_return(true)
         delete :destroy, params: role_param
         expect(response).to have_http_status(:ok)
       end
@@ -104,7 +107,7 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
 
     context 'when role is not found' do
       it 'returns a not found status' do
-        allow(role).to receive(:destroyed?).and_return(false)
+        allow(role).to receive(:deleted?).and_return(false)
         delete :destroy, params: role_param
         expect(response).to have_http_status(:unprocessable_entity)
       end
