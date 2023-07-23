@@ -8,22 +8,32 @@
 
 * Install docker https://www.docker.com/
 
-### Run the following commands:
-1. `docker-compose build`
-2. `docker-compose up`
-3. `http://localhost:3000/`
+## Running dockerized Ruby on Rails  
 
+### Create container and run the project:
+`docker-compose build`
+
+`docker-compose up`
+
+Navigate to `http://localhost:3000/`
+
+### Development Essentials:
 ### Execute test
 `docker-compose run web batch`
+
 `bundle exec rspec spec`
 
 ### Run migrations
+`docker-compose run web batch`
+
 `rails db:migrate`
 
-### local development
-1. `bundle install`
-2. `bin/rails db:migrate`
-3. `bin/rails s`
+## Running local development
+`bundle install`
+
+`bin/rails db:migrate`
+
+`bin/rails s`
 
 ## How to Run rails commands inside a docker container
 
