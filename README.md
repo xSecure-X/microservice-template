@@ -13,6 +13,13 @@
 2. `docker-compose up`
 3. `http://localhost:3000/`
 
+### Execute test
+`docker-compose run web batch`
+`bundle exec rspec spec`
+
+### Run migrations
+`rails db:migrate`
+
 ### local development
 1. `bundle install`
 2. `bin/rails db:migrate`
