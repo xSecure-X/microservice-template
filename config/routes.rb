@@ -20,6 +20,8 @@ Rails.application.routes.draw do
         patch '/:id', to: 'roles#update'
         put '/:id', to: 'roles#update'
         delete '/:id', to: 'roles#destroy'
+        get '/:id/users', to: 'roles#get_users'
+        post '/:id/users/add', to: 'roles#add_user'
       end
     end
   end
