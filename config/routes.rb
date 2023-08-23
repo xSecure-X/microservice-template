@@ -22,6 +22,7 @@ Rails.application.routes.draw do
         delete '/:id', to: 'roles#destroy'
         get '/:id/users', to: 'roles#get_users'
         post '/:id/users/add', to: 'roles#add_user'
+        delete '/:id/users/:userroleid', to: 'roles#destroy_user'
       end
     end
   end

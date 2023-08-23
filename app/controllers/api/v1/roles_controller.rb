@@ -5,7 +5,8 @@ module Api
     # User creator class
     class RolesController < ApplicationController
       protect_from_forgery with: :null_session
-      before_action :set_role, only: %i[show edit update destroy add_user get_users]
+      before_action :set_role, only: %i[show edit update destroy add_user get_users destroy_user]
+      before_action :set_user_role, only: %i[destroy_user]
 
       def index
         @roles = Role.all
@@ -72,10 +73,25 @@ module Api
         render json: ::UserRoles::Services::UserRoleCreator.new.get_users(@role) 
       end
 
+      def destroy_user
+        return if role_check_null || user_role_check_null
+        @userrole = ::UserRoles::Services::UserRoleCreator.new.delete_user_role(@userrole)
+
+        if @userrole.deleted?
+          render json: { success: true, message: '' }, status: :ok
+        else
+          render json: { success: false, message: @userrole.errors }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_role
         @role = Role.find_by(id: params[:id])
+      end
+
+      def set_user_role
+        @userrole = UserRole.find_by(id: params[:userroleid])
       end
 
       def role_params
@@ -95,6 +111,16 @@ module Api
           message: ''
         }, status: :not_found
       end
+
+      def user_role_check_null
+        return false unless @userrole.nil?
+
+        render json: {
+          success: false,
+          message: ''
+        }, status: :not_found
+      end
+
     end
   end
 end
