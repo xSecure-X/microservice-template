@@ -22,7 +22,8 @@ Rails.application.routes.draw do
         delete '/:id', to: 'roles#destroy'
         get '/:id/users', to: 'roles#get_users'
         post '/:id/users/add', to: 'roles#add_user'
-        delete '/:id/users/:userroleid', to: 'roles#destroy_user'
+        delete '/:id/users/:userid', to: 'roles#destroy_user', constraints: { format: 'json' }
+
       end
     end
   end
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
         patch '/:id', to: 'users#update'
         put '/:id', to: 'users#update'
         delete '/:id', to: 'users#destroy'
+        post '/verify_codigo_anfitrion', to: 'users#verify_codigo_anfitrion' 
       end
     end
   end

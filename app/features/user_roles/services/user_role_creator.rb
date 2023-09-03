@@ -17,12 +17,14 @@ module UserRoles
                 to_json(user_roles)
             end
 
-            def delete_user_role(user_role)
-                if user_role
-                  user_role.destroy
+            def delete_user_role(userrole)
+                if userrole
+                    userrole.destroy
                 end
+               
             end
 
+            
             def to_json(users)
                 {
                   result: users,

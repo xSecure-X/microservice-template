@@ -5,7 +5,7 @@ module Api
     # User creator class
     class UsersController < ApplicationController
       protect_from_forgery with: :null_session
-      before_action :set_user, only: [:show, :update, :destroy]
+      before_action :set_user, only: [:show, :update, :destroy,:verify_codigo_anfitrion]
 
       def index
         @users = User.all
@@ -63,6 +63,24 @@ module Api
         
       end
 
+      def verify_codigo_anfitrion
+        user_id = params[:user_id]
+        codigo_anfitrion = params[:codigo_anfitrion].to_i
+        puts "hola"
+        puts user_id
+        puts codigo_anfitrion
+
+        @user = User.find_by(id: user_id)
+
+        if @user.nil?
+          render json: { success: false, message: 'Usuario no encontrado' }, status: :not_found
+        elsif @user.codigoAnfitrion == codigo_anfitrion
+          render json: { success: true, message: 'Código anfitrión verificado correctamente' }, status: :ok
+        else
+          render json: { success: false, message: 'Código anfitrión incorrecto' }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_user
@@ -82,5 +100,8 @@ module Api
           }, status: :not_found
         end
       end
+
+      
+
   end
 end
