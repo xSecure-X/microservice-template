@@ -18,12 +18,25 @@ module Api
       end
 
       def create
-        @user = ::Users::Services::UserCreator.new(user_params).create_user
+        # Genera el código anfitrión único
+        codigo_anfitrion = generate_unique_codigo_anfitrion
+
+        # Combina el código anfitrión con los parámetros del usuario
+        user_params_with_codigo_anfitrion = user_params.merge(codigoAnfitrion: codigo_anfitrion)
+
+        @user = ::Users::Services::UserCreator.new(user_params_with_codigo_anfitrion).create_user
 
         if @user.persisted?
           render json: { success: true, message: "" }, status: :created
         else
           render json: { success: false, message: @user.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def generate_unique_codigo_anfitrion
+        loop do
+          codigo_anfitrion = rand(10000) # Genera un número aleatorio de 0 a 9999
+          return codigo_anfitrion unless User.exists?(codigoAnfitrion: codigo_anfitrion)
         end
       end
 

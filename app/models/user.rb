@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+
+ 
   acts_as_paranoid
   validates :full_name, presence: true, length: { maximum: 100 }
   validates :email, presence: true, length: { maximum: 100 }, uniqueness: true
@@ -9,6 +11,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :rememberable,
   :omniauthable, omniauth_providers: [:google_oauth2]
   alias_attribute :updated_at, :modified_at
+  validates :codigoAnfitrion, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 9999 }
 
   def ability
     @ability ||= Ability.new(self)
@@ -28,4 +31,5 @@ class User < ApplicationRecord
       user.uid = auth.uid
     end
   end
+
 end
