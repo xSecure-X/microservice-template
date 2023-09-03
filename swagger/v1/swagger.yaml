@@ -17,7 +17,7 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/User"
-    
+
     post:
       tags:
         - Users
@@ -113,6 +113,28 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /api/v1/users/verify_codigo_anfitrion:
+    post:
+      tags:
+        - Users
+      summary: Verify codigo anfitrion
+      parameters:
+        - in: body
+          name: verify_code_params
+          description: Verification parameters
+          required: true
+          schema:
+            $ref: "#/definitions/VerifyCodeInput"
+      responses:
+        200:
+          description: Verification successful
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        422:
+          description: Unprocessable entity
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
 definitions:
   User:
     type: "object"
@@ -194,3 +216,11 @@ definitions:
       message:
         type: "string"
 
+  VerifyCodeInput:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      codigo_anfitrion:
+        type: "integer"

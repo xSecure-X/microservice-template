@@ -46,6 +46,46 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
       end
     end
   end
+  describe 'POST#verify_codigo_anfitrion' do
+  # Define el ejemplo de datos que proporcionaste
+  let(:request_body) do
+    {
+      id: 'string',
+      codigo_anfitrion: 'integer'
+    }
+  end
+
+  context 'with valid parameters' do
+    it 'verifies the codigo_anfitrion and returns a success response' do
+      # Realiza la solicitud POST con los datos de ejemplo
+      post '/api/v1/users/verify_codigo_anfitrion', params: request_body
+
+      # Verifica que la respuesta tenga un código de estado exitoso (por ejemplo, 200 OK)
+      expect(response).to have_http_status(:ok)
+
+      # Aquí puedes agregar más expectativas según la respuesta esperada
+      # Por ejemplo, si esperas una respuesta JSON, puedes verificar su contenido.
+      # Para eso, puedes usar expectaciones como JSON.parse(response.body) o RSpec matchers.
+    end
+  end
+
+  context 'with invalid parameters' do
+    it 'returns an error response' do
+      # Modifica los datos de ejemplo para simular una solicitud inválida
+      invalid_request_body = request_body.merge(codigo_anfitrion: nil)
+
+      # Realiza la solicitud POST con los datos de ejemplo modificados
+      post '/api/v1/users/verify_codigo_anfitrion', params: invalid_request_body
+
+      # Verifica que la respuesta tenga un código de estado de error (por ejemplo, 422 Unprocessable Entity)
+      expect(response).to have_http_status(:unprocessable_entity)
+
+      # Puedes verificar el contenido de la respuesta para asegurarte de que contiene errores.
+      # Por ejemplo, puedes verificar que la respuesta JSON contiene un mensaje de error.
+    end
+  end
+end
+
   describe 'PUT #update' do
     let(:valid_params) { { id: role_id, role: { name: 'Updated Role', description: 'Updated Description' } } }
 

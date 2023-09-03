@@ -64,11 +64,8 @@ module Api
       end
 
       def verify_codigo_anfitrion
-        user_id = params[:user_id]
+        user_id = params[:id]
         codigo_anfitrion = params[:codigo_anfitrion].to_i
-        puts "hola"
-        puts user_id
-        puts codigo_anfitrion
 
         @user = User.find_by(id: user_id)
 
