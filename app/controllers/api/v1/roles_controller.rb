@@ -91,7 +91,7 @@ module Api
       end
 
       def set_user_role
-        @userrole = UserRole.find_by(id: params[:userroleid])
+        @userrole = UserRole.find_by(roleId: params[:id], userId: params[:userroleid])
       end
 
       def role_params
