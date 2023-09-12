@@ -5,7 +5,7 @@ module Api
     # User creator class
     class UsersController < ApplicationController
       protect_from_forgery with: :null_session
-      before_action :set_user, only: [:show, :update, :destroy]
+      before_action :set_user, only: [:show, :update, :destroy,:verify_code]
 
       def index
         @users = User.all
@@ -18,12 +18,25 @@ module Api
       end
 
       def create
-        @user = ::Users::Services::UserCreator.new(user_params).create_user
+        # Genera el código anfitrión único
+        code = generate_unique_code
+
+        # Combina el código anfitrión con los parámetros del usuario
+        user_params_with_code = user_params.merge(code: code)
+
+        @user = ::Users::Services::UserCreator.new(user_params_with_code).create_user
 
         if @user.persisted?
           render json: { success: true, message: "" }, status: :created
         else
           render json: { success: false, message: @user.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def generate_unique_code
+        loop do
+          code = rand(10000) # Genera un número aleatorio de 0 a 9999
+          return code unless User.exists?(code: code)
         end
       end
 
@@ -50,6 +63,21 @@ module Api
         
       end
 
+      def verify_code
+        user_id = params[:id]
+        code = params[:code].to_i
+
+        @user = User.find_by(id: user_id)
+
+        if @user.nil?
+          render json: { success: false, message: @user.errors }, status: :not_found
+        elsif @user.code == code
+          render json: { success: true, message: 'Code verified' }, status: :ok
+        else
+          render json: { success: false, message: 'Incorrect code' }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_user
@@ -69,5 +97,8 @@ module Api
           }, status: :not_found
         end
       end
+
+      
+
   end
 end

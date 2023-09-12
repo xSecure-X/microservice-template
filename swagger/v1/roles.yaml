@@ -108,6 +108,81 @@ paths:
           description: Role not found
           schema:
             $ref: '#/definitions/ErrorResponse'
+  /api/v1/roles/{id}/users:
+    get:
+      tags:
+        - Roles
+      summary: Get users added to role by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the role to retrieve
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/SuccessShowUsers'
+        '404':
+          description: Role not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/v1/roles/{id}/users/add:
+    post:
+      tags:
+        - Roles
+      summary: Add a user to role
+      parameters:
+        - name: id
+          in: path
+          description: ID of the role to add user
+          required: true
+          type: string
+          format: uuid
+        - in: body
+          name: user
+          description: User Id to add
+          required: true
+          schema:
+            $ref: '#/definitions/UserIdInput'
+      responses:
+        '201':
+          description: Role created successfully
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '422':
+          description: Unprocessable entity
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/v1/roles/{id}/users/{user-role-id}:
+    delete:
+      tags:
+        - Roles
+      summary: Delete a user from role
+      parameters:
+        - name: id
+          in: path
+          description: ID of the role to add user
+          required: true
+          type: string
+          format: uuid
+        - name: user-role-id
+          in: path
+          description: ID of the user-role relation to delete
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: User removed from role successfully
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '404':
+          description: Role not found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
 definitions:
   Role:
     type: object
@@ -136,7 +211,13 @@ definitions:
       name:
         type: string
       description:
-        type: string 
+        type: string
+  UserIdInput:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: uuid
    
   ErrorResponse:
     type: "object"
@@ -160,6 +241,28 @@ definitions:
     properties:
       result:
         $ref: "#/definitions/Role"
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+  
+  User:
+    type: "object"
+    properties:
+      id:
+        type: string
+        format: uuid
+      full_name:
+        type: string
+      email:
+        type: string
+  SuccessShowUsers:
+    type: "object"
+    properties:
+      result:
+        type: array
+        items:
+          $ref: "#/definitions/User"
       success:
         type: "boolean"
       message:

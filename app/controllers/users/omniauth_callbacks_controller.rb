@@ -1,4 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token, only: [:google_oauth2, :auth]
   def google_oauth2
     user = User.from_omniauth(auth)
     if user.present?

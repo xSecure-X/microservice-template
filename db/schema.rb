@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_28_004224) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_03_062944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_004224) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+  end
+
+  create_table "user_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "userId"
+    t.uuid "roleId"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["userId", "roleId"], name: "index_user_roles_on_userId_and_roleId"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -36,6 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_004224) do
     t.datetime "modified_at", null: false
     t.string "telefono"
     t.datetime "deleted_at"
+    t.integer "codigoAnfitrion"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
   end
 
