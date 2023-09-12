@@ -7,9 +7,9 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
   let(:role_creator) { instance_double(::Roles::Services::RoleCreator) }
   let(:user_role_creator) { instance_double(::UserRoles::Services::UserRoleCreator) }
   let(:role) { instance_double(Role, name: 'Client', description: 'Description') }
-  let(:user_role) { instance_double(UserRole, userId: 'aaaaa-test', roleId: 'bbbbb-test') }
-  let(:role_id) { 'c449b856-test' }
-  let(:user_role_id) { 'c449b896-test' }
+  let(:user_role) { instance_double(UserRole, roleId: 'bbbbb-test', userId: 'aaaaa-test') }
+  let(:role_id) { 'bbbbb-test' }
+  let(:user_id) { 'aaaaa-test' }
 
   describe 'POST #create' do
     let(:valid_params) { { role: { name: 'Client', description: 'Description' } } }
@@ -50,7 +50,7 @@ RSpec.describe ::Api::V1::RolesController, type: :controller do
       end
     end
   end
-  describe 'POST#verify_codigo_anfitrion' do
+  describe 'POST#verify_code' do
   # Define el ejemplo de datos que proporcionaste
   let(:request_body) do
     {
@@ -197,15 +197,16 @@ end
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+  end
     describe 'DELETE #destroy_user' do
-      let(:user_role_param) { { id: role_id, userroleid: user_role_id } }
+      let(:user_role_param) { { id: role_id, userid: user_id } }
   
       before do
         allow(::UserRoles::Services::UserRoleCreator).to receive(:new).and_return(user_role_creator)
         allow(user_role_creator).to receive(:delete_user_role).and_return(user_role)
         allow(user_role).to receive_message_chain(:errors, :full_messages).and_return(['Error message'])
         allow(Role).to receive(:find_by).with(id: role_id).and_return(role)
-        allow(UserRole).to receive(:find_by).with(id: user_role_id).and_return(user_role)
+        allow(UserRole).to receive(:find_by).with(roleId: role_id, userId: user_id).and_return(user_role)
       end
   
       context 'when role is found' do
@@ -225,5 +226,4 @@ end
       end
       
     end
-  end
 end

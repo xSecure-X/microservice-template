@@ -5,8 +5,8 @@ module Api
     # User creator class
     class RolesController < ApplicationController
       protect_from_forgery with: :null_session
-      before_action :set_role, only: %i[show edit update destroy add_user get_users ]
-      before_action :set_user_role, only: %i[delete_user_role]
+      before_action :set_role, only: %i[show edit update destroy add_user get_users destroy_user ]
+      before_action :set_user_role, only: %i[destroy_user]
      
 
 
@@ -93,7 +93,7 @@ module Api
       end
 
       def set_user_role
-        @userrole = UserRole.find_by(roleId: params[:id], userId: params[:userroleid])
+        @userrole = UserRole.find_by(roleId: params[:id], userId: params[:userid])
       end
 
      def role_params

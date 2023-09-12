@@ -38,7 +38,7 @@ Rails.application.routes.draw do
         patch '/:id', to: 'users#update'
         put '/:id', to: 'users#update'
         delete '/:id', to: 'users#destroy'
-        post '/verify_codigo_anfitrion', to: 'users#verify_codigo_anfitrion' 
+        post '/verify_codigo_anfitrion', to: 'users#verify_code' 
       end
     end
   end

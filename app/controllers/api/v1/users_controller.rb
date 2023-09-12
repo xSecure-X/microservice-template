@@ -5,7 +5,7 @@ module Api
     # User creator class
     class UsersController < ApplicationController
       protect_from_forgery with: :null_session
-      before_action :set_user, only: [:show, :update, :destroy,:verify_codigo_anfitrion]
+      before_action :set_user, only: [:show, :update, :destroy,:verify_code]
 
       def index
         @users = User.all
@@ -19,12 +19,12 @@ module Api
 
       def create
         # Genera el código anfitrión único
-        codigo_anfitrion = generate_unique_codigo_anfitrion
+        code = generate_unique_code
 
         # Combina el código anfitrión con los parámetros del usuario
-        user_params_with_codigo_anfitrion = user_params.merge(codigoAnfitrion: codigo_anfitrion)
+        user_params_with_code = user_params.merge(code: code)
 
-        @user = ::Users::Services::UserCreator.new(user_params_with_codigo_anfitrion).create_user
+        @user = ::Users::Services::UserCreator.new(user_params_with_code).create_user
 
         if @user.persisted?
           render json: { success: true, message: "" }, status: :created
@@ -33,10 +33,10 @@ module Api
         end
       end
 
-      def generate_unique_codigo_anfitrion
+      def generate_unique_code
         loop do
-          codigo_anfitrion = rand(10000) # Genera un número aleatorio de 0 a 9999
-          return codigo_anfitrion unless User.exists?(codigoAnfitrion: codigo_anfitrion)
+          code = rand(10000) # Genera un número aleatorio de 0 a 9999
+          return code unless User.exists?(code: code)
         end
       end
 
@@ -63,18 +63,18 @@ module Api
         
       end
 
-      def verify_codigo_anfitrion
+      def verify_code
         user_id = params[:id]
-        codigo_anfitrion = params[:codigo_anfitrion].to_i
+        code = params[:code].to_i
 
         @user = User.find_by(id: user_id)
 
         if @user.nil?
-          render json: { success: false, message: 'Usuario no encontrado' }, status: :not_found
-        elsif @user.codigoAnfitrion == codigo_anfitrion
-          render json: { success: true, message: 'Código anfitrión verificado correctamente' }, status: :ok
+          render json: { success: false, message: @user.errors }, status: :not_found
+        elsif @user.code == code
+          render json: { success: true, message: 'Code verified' }, status: :ok
         else
-          render json: { success: false, message: 'Código anfitrión incorrecto' }, status: :unprocessable_entity
+          render json: { success: false, message: 'Incorrect code' }, status: :unprocessable_entity
         end
       end
 
